@@ -20,6 +20,12 @@ module.exports = (args) => {
     }
     const env = process.env;
 
+    // Fork default for the desktop app (`.env.electron` can still override it).
+    // Local files don't need a service.
+    if (target === 'electron' && !env.ENABLED_SERVICES) {
+        env.ENABLED_SERVICES = 'emby,jellyfin,plex,spotify,internet-radio,lastfm,listenbrainz';
+    }
+
     // icecast-metadata-player libs.
     const icecastPlayerPath =
         './node_modules/icecast-metadata-player/build/icecast-metadata-player';
