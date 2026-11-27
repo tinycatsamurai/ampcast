@@ -42,8 +42,17 @@ exports.default = async function (context) {
     } else if (process.platform === 'win32') {
         // VMP sign via EVS
         const {execSync} = require('child_process');
+        try {
+            execSync('python -c "import castlabs_evs.vmp"', {stdio: 'ignore'});
+        } catch {
+            console.warn(
+                '  • Skipping VMP signing: castlabs-evs is not installed (pip install castlabs-evs).' +
+                    ' Widevine DRM (e.g. Spotify) may not work in this build.'
+            );
+            return;
+        }
         console.log('  • VMP signing start');
-        execSync('python -m castlabs_evs.vmp sign-pkg ./dist/win-unpacked');
+        execSync(`python -m castlabs_evs.vmp sign-pkg "${context.appOutDir}"`);
         console.log('  • VMP signing complete');
     }
 };
