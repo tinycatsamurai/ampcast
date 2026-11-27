@@ -6,6 +6,7 @@ import MediaType from 'types/MediaType';
 import PlaybackType from 'types/PlaybackType';
 import Thumbnail from 'types/Thumbnail';
 import {Logger, loadLibrary} from 'utils';
+import ampcastElectron from 'services/ampcastElectron';
 import {getTitleFromUrl} from './metadata';
 
 const logger = new Logger('music-metadata-js');
@@ -51,7 +52,18 @@ export async function createMediaItemFromFile(file: File): Promise<MediaItem> {
         duration: Number(duration.toFixed(3)),
         blob: file,
         fileSize: file.size,
+        filePath: getPathForFile(file),
     };
+}
+
+// Desktop app only (browsers don't expose file paths).
+function getPathForFile(file: File): string | undefined {
+    try {
+        return ampcastElectron?.getPathForFile?.(file) || undefined;
+    } catch (err) {
+        logger.warn(err);
+        return undefined;
+    }
 }
 
 export async function createMediaItemFromStream(

@@ -4,7 +4,7 @@ import MediaItem from 'types/MediaItem';
 import PlaylistItem from 'types/PlaylistItem';
 import Thumbnail from 'types/Thumbnail';
 import {copyToClipboard, formatDate, formatDuration, Logger} from 'utils';
-import Button from 'components/Button';
+import Button, {CopyButton} from 'components/Button';
 import CoverArt from 'components/CoverArt';
 import Dialog, {DialogProps, showDialog} from 'components/Dialog';
 import useCurrentlyPlaying from 'hooks/useCurrentlyPlaying';
@@ -145,9 +145,19 @@ export default function CoverArtDialog({item: initialItem, ...props}: CoverArtDi
                                         </td>
                                     </tr>
                                 ) : null}
+                                {filePath ? (
+                                    <tr>
+                                        <th scope="row">Location</th>
+                                        <td className="cover-art-dialog-location">
+                                            <span className="cover-art-dialog-path">
+                                                {filePath}
+                                            </span>
+                                            <FileCopyButton path={filePath} />
+                                        </td>
+                                    </tr>
+                                ) : null}
                             </tbody>
                         </table>
-                        {filePath ? <FileLocation path={filePath} /> : null}
                     </div>
                 </div>
                 <footer className="dialog-buttons">
@@ -158,41 +168,15 @@ export default function CoverArtDialog({item: initialItem, ...props}: CoverArtDi
     );
 }
 
-function FileLocation({path}: {path: string}) {
-    const [copied, setCopied] = useState(false);
-
-    useEffect(() => setCopied(false), [path]);
-
-    const handleCopyClick = useCallback(async () => {
-        try {
-            await copyToClipboard(path);
-            setCopied(true);
-        } catch (err) {
-            logger.error(err);
-        }
-    }, [path]);
-
-    const handleFocus = useCallback((event: React.FocusEvent<HTMLTextAreaElement>) => {
-        event.target.select();
-    }, []);
-
+function FileCopyButton({path}: {path: string}) {
+    const handleClick = useCallback(() => copyToClipboard(path), [path]);
     return (
-        <fieldset className="cover-art-dialog-location">
-            <legend>Location</legend>
-            <textarea
-                value={path}
-                readOnly
-                rows={2}
-                spellCheck={false}
-                aria-label="File path"
-                onFocus={handleFocus}
-            />
-            <p>
-                <Button type="button" onClick={handleCopyClick}>
-                    {copied ? 'Copied' : 'Copy path'}
-                </Button>
-            </p>
-        </fieldset>
+        <CopyButton
+            className="cover-art-dialog-copy"
+            title="Copy path"
+            aria-label="Copy path"
+            onClick={handleClick}
+        />
     );
 }
 

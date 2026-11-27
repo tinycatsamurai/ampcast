@@ -10,5 +10,6 @@ export default interface AmpcastElectron {
     getLocalhostIP(): Promise<string>;
     getPreferredPort(): Promise<number>;
     setPreferredPort(port: number): Promise<void>;
+    getPathForFile(file: File): string;
     quit(): void;
 }

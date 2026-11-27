@@ -79,19 +79,32 @@
     }
 
     &-location {
-        margin-top: 0.75em;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.25em;
+    }
 
-        textarea {
-            display: block;
-            width: 100%;
-            resize: none;
-            font-family: monospace;
-            font-size: 0.875em;
-            user-select: text;
+    &-path {
+        flex: auto;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        user-select: text;
+    }
+
+    &-copy.copy-button {
+        flex: none;
+        min-width: 0;
+        margin: -0.1em 0 0 0;
+        padding: 0.1em 0.3em;
+        font-size: 0.875em;
+        line-height: 1;
+
+        .icon {
+            margin-right: 0;
         }
 
-        p {
-            text-align: right;
+        .text {
+            display: none;
         }
     }
 }
