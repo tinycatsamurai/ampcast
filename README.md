@@ -16,74 +16,44 @@
 * ReplayGain / Lyrics
 * Internet radio
 
-## Web app / PWA
+## About this fork
 
-Available at https://ampcast.app
+A personal fork of [ampcast](https://github.com/rekkyrosso/ampcast), built only as a desktop
+app for Windows and Linux. There is no web app, Docker image or macOS build.
 
-## Desktop app
-
-Windows, Mac and Linux builds available.
-
-Download from https://github.com/rekkyrosso/ampcast/releases/latest
-
-## Self-hosting
-
-### Docker
-
-Docker images are hosted on `ghcr.io` and are available to view [here](https://github.com/rekkyrosso/ampcast/pkgs/container/ampcast).
-
-Run the container:
-
-```bash
-# Run the latest version
-docker run --name ampcast -p 8000:8000 ghcr.io/rekkyrosso/ampcast:latest
-```
-
-Or with `docker-compose`:
-
-```bash
-docker-compose up -d
-```
-
-Use this [`docker-compose.yml`](https://raw.githubusercontent.com/rekkyrosso/ampcast/refs/heads/main/docker-compose.yml) file as a template.
-
-### From source code
+## Building from source
 
 Requires Node >= 24.
 
 ```bash
-git clone https://github.com/rekkyrosso/ampcast.git
-
-cd ./ampcast
-
 # install deps
 npm i
 
-# build the web view
-npm run build:pwa
+# build the web view for the desktop app
+npm run build:electron
 
-# start the web server
-npm run start:pwa
+# run the desktop app
+cd ./app
+npm i --allow-git=root   # first time only (Electron comes from castlabs' GitHub releases)
+npm start
 ```
 
-Navigate to http://localhost:8000 to run the app.
-
-Start the server with a different host/port:
+Package it (in `./app`):
 
 ```bash
-npm run start:pwa -- --host 1.2.3.4 --port 8001
+npm run build:win     # NSIS installer + zip
+npm run build:linux   # AppImage, deb, rpm, tar.xz (build on Linux)
 ```
 
-You may get CORS errors using anything other than `localhost` but you have the option anyway.
-
-To use the development environment, replace 'pwa' with 'dev':
+To work on the UI in a browser, use the development environment and go to http://localhost:8000:
 
 ```bash
 npm run build:dev
 npm run start:dev
 ```
 
-You can optionally create a `.env` file ([example](https://raw.githubusercontent.com/rekkyrosso/ampcast/refs/heads/main/.env.example)) to store API keys and other config options.
+You can optionally create a `.env` file ([example](./.env.example)) to store API keys and other
+config options (`.env.electron` for the desktop build).
 
 ## Contributing
 
