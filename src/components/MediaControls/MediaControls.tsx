@@ -1,9 +1,11 @@
 import React from 'react';
 import {ListViewHandle} from 'components/ListView';
 import {IconButtons} from 'components/Button';
+import CoverArt from 'components/CoverArt';
 import useCurrentlyPlaying from 'hooks/useCurrentlyPlaying';
 import usePlaybackState from 'hooks/usePlaybackState';
 import MediaButtons from './MediaButtons';
+import NowPlayingInfo from './NowPlayingInfo';
 import PlaylistMenuButton from './PlaylistMenuButton';
 import RadioButtons from './RadioButtons';
 import TimeControl from './TimeControl';
@@ -22,6 +24,11 @@ export default function MediaControls({overlay, playlistRef}: MediaControlsProps
 
     return (
         <div className={`media-controls${overlay ? '-overlay' : ''}`}>
+            {overlay ? null : (
+                <div className="now-playing-cover">
+                    {currentlyPlaying ? <CoverArt item={currentlyPlaying} size={240} /> : null}
+                </div>
+            )}
             <TimeControl overlay={overlay} />
             <div className="playback-control">
                 <VolumeControl overlay={overlay} />
@@ -37,9 +44,12 @@ export default function MediaControls({overlay, playlistRef}: MediaControlsProps
                         ) : null}
                     </>
                 ) : (
-                    <div className="media-buttons">
-                        <MediaButtons overlay={overlay} playlistRef={playlistRef} />
-                    </div>
+                    <>
+                        <NowPlayingInfo />
+                        <div className="media-buttons">
+                            <MediaButtons overlay={overlay} playlistRef={playlistRef} />
+                        </div>
+                    </>
                 )}
                 {!overlay && playlistRef ? <PlaylistMenuButton playlistRef={playlistRef} /> : null}
             </div>

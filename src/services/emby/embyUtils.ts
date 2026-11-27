@@ -219,12 +219,26 @@ function createMediaItem(track: BaseItemDto): MediaItem {
                   : undefined
             : track.Container || undefined,
         container: track.Container || undefined,
+        ...getAudioQuality(source),
         links: {
             self: true,
             album: track.Album && track.AlbumId ? `${serviceId}:album:${track.AlbumId}` : undefined,
             albumArtists: albumArtists?.map((artist) => getArtistLink(artist)),
             artists: artists?.map((artist) => getArtistLink(artist)),
         },
+    };
+}
+
+function getAudioQuality(
+    source: NonNullable<BaseItemDto['MediaSources']>[number] | undefined
+): Pick<MediaItem, 'codec' | 'sampleRate' | 'bitDepth' | 'channels' | 'fileSize'> {
+    const audio = source?.MediaStreams?.find((stream) => (stream.Type as string) === 'Audio');
+    return {
+        codec: audio?.Codec || undefined,
+        sampleRate: audio?.SampleRate || undefined,
+        bitDepth: audio?.BitDepth || undefined,
+        channels: audio?.Channels || undefined,
+        fileSize: source?.Size || undefined,
     };
 }
 

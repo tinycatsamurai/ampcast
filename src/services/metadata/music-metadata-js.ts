@@ -50,6 +50,7 @@ export async function createMediaItemFromFile(file: File): Promise<MediaItem> {
         ...item,
         duration: Number(duration.toFixed(3)),
         blob: file,
+        fileSize: file.size,
     };
 }
 
@@ -138,7 +139,7 @@ function createMediaItem(
     name: string, // file name/url
     metadata: IAudioMetadata
 ): MediaItem {
-    const {common} = metadata;
+    const {common, format} = metadata;
     const floor = (value: number | null = 0) => Math.floor(Number(value)) || undefined;
     const album = common.album?.trim() || undefined;
     const artist = common.artist?.trim();
@@ -177,5 +178,11 @@ function createMediaItem(
         albumPeak: common.replaygain_album_peak?.dB,
         trackGain: common.replaygain_track_gain?.dB,
         trackPeak: common.replaygain_track_peak?.dB,
+        bitRate: floor((format.bitrate || 0) / 1000),
+        container: format.container || undefined,
+        codec: format.codec || undefined,
+        sampleRate: format.sampleRate || undefined,
+        bitDepth: format.bitsPerSample || undefined,
+        channels: format.numberOfChannels || undefined,
     };
 }

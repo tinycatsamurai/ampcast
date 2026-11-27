@@ -153,6 +153,11 @@ export function createMediaItemFromTrack(
         bitRate: media.bitrate,
         badge: media.audioCodec,
         container: media.container,
+        codec: stream?.codec || media.audioCodec || undefined,
+        sampleRate: stream?.samplingRate || undefined,
+        bitDepth: stream?.bitDepth || undefined,
+        channels: stream?.channels || undefined,
+        fileSize: part?.size || undefined,
         explicit: track.contentRating ? track.contentRating === 'explicit' : undefined,
         links: {
             self: true,

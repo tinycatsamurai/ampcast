@@ -51,6 +51,12 @@ export default interface MediaItem extends BaseMediaObject {
     readonly bitRate?: number;
     readonly bpm?: number;
     readonly container?: string;
+    // Audio quality (from the source file, not what is streamed).
+    readonly codec?: string;
+    readonly sampleRate?: number; // Hz
+    readonly bitDepth?: number; // bits per sample
+    readonly channels?: number;
+    readonly fileSize?: number; // bytes
     readonly explicit?: boolean;
     readonly shareLink?: string;
     // Radio stations.

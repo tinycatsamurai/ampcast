@@ -216,6 +216,7 @@ declare namespace plex {
         readonly lra: string;
         readonly peak: string;
         readonly samplingRate: number;
+        readonly bitDepth?: number;
         readonly selected: boolean;
         readonly streamType: number;
     }
