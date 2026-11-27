@@ -7,6 +7,7 @@ import {
     ipcMain,
     protocol,
     safeStorage,
+    session,
     shell,
     BrowserWindow,
     Menu,
@@ -134,12 +135,19 @@ async function createMainWindow(url, mainWindowState) {
 
     mainWindowState.manage(mainWindow);
 
+    // Chromium writes localStorage to disk lazily, so save it before we go.
+    mainWindow.on('close', flushStorageData);
+    mainWindow.on('session-end', flushStorageData); // Windows logoff/shutdown.
+
     await mainWindow.loadURL(url);
     mainWindow.show();
 }
 
 function createBridge() {
     ipcMain.on('quit', () => app.quit());
+
+    // Settings were saved (localStorage).
+    ipcMain.on('flushStorageData', flushStorageData);
 
     // Synch the window chrome with the app theme.
     ipcMain.on('setFrameColor', (_, color) => {
@@ -299,6 +307,16 @@ app.whenReady().then(async () => {
         throw err;
     }
 });
+
+function flushStorageData() {
+    try {
+        session.defaultSession.flushStorageData();
+    } catch (err) {
+        log.warn('Failed to flush storage data', err);
+    }
+}
+
+app.on('before-quit', flushStorageData);
 
 app.on('window-all-closed', () => {
     if (!isMac()) {
