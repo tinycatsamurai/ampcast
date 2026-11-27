@@ -2,6 +2,7 @@ const {contextBridge, ipcRenderer, webUtils} = require('electron');
 
 contextBridge.exposeInMainWorld('ampcastElectron', {
     quit: () => ipcRenderer.send('quit'),
+    flushStorageData: () => ipcRenderer.send('flushStorageData'),
     disableLoopbackAudio: () => ipcRenderer.invoke('disable-loopback-audio'),
     enableLoopbackAudio: () => ipcRenderer.invoke('enable-loopback-audio'),
     getCredential: (key) => ipcRenderer.invoke('getCredential', key),

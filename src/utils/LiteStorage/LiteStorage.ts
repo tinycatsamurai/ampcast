@@ -8,6 +8,7 @@ const logger = new Logger('LiteStorage');
 export default class LiteStorage {
     private static readonly ids: string[] = [];
     private static readonly event$ = fromEvent<StorageEvent>(window, 'storage');
+    private static readonly write$ = new Subject<void>();
     readonly id: string;
     private readonly storageArea: Storage;
     private readonly change$ = new Subject<void>();
@@ -35,6 +36,11 @@ export default class LiteStorage {
                 this.storageArea = memoryStorage;
                 break;
         }
+    }
+
+    // Any write to any `LiteStorage` instance.
+    static observeWrite(): Observable<void> {
+        return LiteStorage.write$;
     }
 
     observeChange(): Observable<void> {
@@ -107,6 +113,7 @@ export default class LiteStorage {
 
     setSecret<T extends string>(key: string, value: T): void {
         this.storageArea.setItem(encode(`${this.id}/${key}`), encode(value));
+        LiteStorage.write$.next();
     }
 
     getString<T extends string | ''>(key: string, defaultValue: T | '' = ''): T {
@@ -132,6 +139,7 @@ export default class LiteStorage {
         if (value !== prevValue) {
             this.storageArea.setItem(key, value);
             this.change$.next();
+            LiteStorage.write$.next();
         }
     }
 
@@ -139,6 +147,7 @@ export default class LiteStorage {
         if (this.hasItem(key)) {
             this.storageArea.removeItem(`${this.id}/${key}`);
             this.change$.next();
+            LiteStorage.write$.next();
         }
     }
 
@@ -154,6 +163,7 @@ export default class LiteStorage {
         if (keys.length > 0) {
             keys.forEach((key) => this.storageArea.removeItem(key));
             this.change$.next();
+            LiteStorage.write$.next();
         }
     }
 }
