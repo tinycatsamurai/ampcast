@@ -391,7 +391,6 @@ function getPlayableUrl(item: MediaItem, settings: EmbySettings = embySettings):
         } else {
             const audioParams = new URLSearchParams({
                 MaxStreamingBitrate: '140000000',
-                MaxSampleRate: '48000',
                 TranscodingProtocol: 'hls',
                 TranscodingContainer: 'aac',
                 Container: `opus,webm|opus,mp3,aac,m4a|aac${
