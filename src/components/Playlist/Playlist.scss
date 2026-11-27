@@ -55,6 +55,16 @@
                 }
             }
 
+            &.cover {
+                padding: 0 0.125rem;
+
+                .cover-art {
+                    width: 1.25em;
+                    height: 1.25em;
+                    border-radius: 2px;
+                }
+            }
+
             &.index {
                 position: relative;
                 justify-content: center;

@@ -5,6 +5,7 @@ import PlaylistItem from 'types/PlaylistItem';
 import RepeatMode from 'types/RepeatMode';
 import {hasPlayableSrc} from 'services/mediaServices';
 import {ExplicitBadge, LivePlaybackBadge} from 'components/Badges';
+import CoverArt from 'components/CoverArt';
 import Icon, {IconName} from 'components/Icon';
 import {ListViewLayout} from 'components/ListView';
 import RadioButtons from 'components/MediaControls/RadioButtons';
@@ -19,6 +20,7 @@ const playlistLayout: ListViewLayout<PlaylistItem> = {
     cols: [
         {title: '#', render: () => null, align: 'right', className: 'index'},
         {title: 'Source', render: RowIcon, align: 'center', className: 'source'},
+        {title: 'Cover', render: RowCover, align: 'center', className: 'cover'},
         {title: 'Title', render: RowTitle, className: 'title'},
         {title: 'Time', render: Duration, align: 'right', className: 'duration'},
     ],
@@ -121,6 +123,11 @@ function RowIcon(item: PlaylistItem) {
             }
         />
     );
+}
+
+function RowCover(item: PlaylistItem, {busy}: {busy: boolean}) {
+    // Don't load images while scrolling (prevents flicker and excess requests).
+    return <CoverArt item={item} size={60} placeholder={busy} />;
 }
 
 function RowTitle(item: PlaylistItem) {
