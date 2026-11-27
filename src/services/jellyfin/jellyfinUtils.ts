@@ -212,6 +212,7 @@ function createMediaItem(track: LegacyBaseItemDto): MediaItem {
         mediaType: isVideo ? MediaType.Video : MediaType.Audio,
         externalUrl: getExternalUrl(track),
         fileName: getFileName(track.Path || '') || track.Name || '[unknown]',
+        filePath: track.Path || undefined,
         title: (track.Name || '').trim(),
         duration: track.RunTimeTicks ? track.RunTimeTicks / 10_000_000 : 0,
         year: track.ProductionYear || undefined,
