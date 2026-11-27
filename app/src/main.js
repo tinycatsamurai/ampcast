@@ -234,8 +234,12 @@ function createBridge() {
     });
 }
 
+// Auto-update is off until this fork publishes releases (to tinycatsamurai/ampcast, see
+// `build.publish` in package.json). To turn it back on, set this to `true`.
+const autoUpdateEnabled = false;
+
 async function checkForUpdatesAndNotify() {
-    if (isPortable) {
+    if (!autoUpdateEnabled || isPortable) {
         // The updater installs the NSIS build, which would be a separate copy.
         return;
     }

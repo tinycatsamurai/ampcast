@@ -1,7 +1,6 @@
 {
-    "name": "ampcast-app",
-    "productName": "ampcast",
-    "desktopName": "org.rekkyrosso.ampcast",
+    "name": "ampcast-tcs",
+    "desktopName": "io.github.tinycatsamurai.ampcast",
     "version": "0.10.1",
     "description": "Ampcast music player",
     "homepage": "https://ampcast.app",
@@ -41,8 +40,7 @@
         "npm": ">=11.x"
     },
     "build": {
-        "productName": "ampcast",
-        "appId": "org.rekkyrosso.ampcast",
+        "appId": "io.github.tinycatsamurai.ampcast",
         "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
         "files": [
             "src",
@@ -86,11 +84,7 @@
                 "tar.xz"
             ],
             "icon": "assets/icons/ampcast.png",
-            "desktop": {
-                "entry": {
-                    "startupWMClass": "ampcast"
-                }
-            },
+            "syncDesktopName": true,
             "category": "AudioVideo;Audio;Player"
         },
         "nsis": {
@@ -105,7 +99,7 @@
         },
         "publish": {
             "provider": "github",
-            "owner": "rekkyrosso",
+            "owner": "tinycatsamurai",
             "repo": "ampcast"
         }
     },
