@@ -39,6 +39,7 @@ export default interface MediaItem extends BaseMediaObject {
     readonly caa_mbid?: string; // cover art archive
     // Files.
     readonly fileName?: string;
+    readonly filePath?: string; // Full path on the media server
     readonly blob?: Blob;
     readonly blobUrl?: string;
     // ReplayGain.

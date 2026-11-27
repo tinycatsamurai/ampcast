@@ -157,6 +157,10 @@
         height: var(--now-playing-cover-size);
         margin-bottom: var(--gutter-width);
 
+        &[role=button] {
+            cursor: pointer;
+        }
+
         .cover-art {
             width: 100%;
             height: 100%;

@@ -1,4 +1,4 @@
-const {contextBridge, ipcRenderer} = require('electron');
+const {contextBridge, ipcRenderer, webUtils} = require('electron');
 
 contextBridge.exposeInMainWorld('ampcastElectron', {
     quit: () => ipcRenderer.send('quit'),
@@ -13,4 +13,6 @@ contextBridge.exposeInMainWorld('ampcastElectron', {
     getLocalhostIP: () => ipcRenderer.invoke('getLocalhostIP'),
     getPreferredPort: () => ipcRenderer.invoke('getPreferredPort'),
     setPreferredPort: (port) => ipcRenderer.invoke('setPreferredPort', port),
+    // Replaces the removed `File.path` (empty string if the file isn't on disk).
+    getPathForFile: (file) => webUtils.getPathForFile(file),
 });
