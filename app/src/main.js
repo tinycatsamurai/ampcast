@@ -1,3 +1,5 @@
+// Must be first: sets the data folder before anything uses it.
+import isPortable from './portable.js';
 import {
     app,
     components,
@@ -233,6 +235,10 @@ function createBridge() {
 }
 
 async function checkForUpdatesAndNotify() {
+    if (isPortable) {
+        // The updater installs the NSIS build, which would be a separate copy.
+        return;
+    }
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     try {
