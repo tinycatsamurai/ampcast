@@ -1,5 +1,6 @@
 import MediaItem from 'types/MediaItem';
 import MediaType from 'types/MediaType';
+import PlaybackType from 'types/PlaybackType';
 import {Logger} from 'utils';
 import embyApi from './embyApi';
 import {EmbySettings} from './embySettings';
@@ -19,7 +20,7 @@ export async function reportStart(
                 ItemId,
                 IsPaused: false,
                 PositionTicks: 0,
-                PlayMethod: 'Transcode',
+                PlayMethod: getPlayMethod(item),
                 PlaySessionId,
             },
             settings
@@ -78,7 +79,7 @@ export async function reportProgress(
                 ItemId,
                 IsPaused: paused,
                 PositionTicks: Math.floor(currentTime * 10_000_000),
-                PlayMethod: 'Transcode',
+                PlayMethod: getPlayMethod(item),
                 EventName: eventName,
                 PlaySessionId,
             },
@@ -87,4 +88,9 @@ export async function reportProgress(
     } catch (err) {
         logger.error(err);
     }
+}
+
+// Also used by Jellyfin.
+function getPlayMethod(item: MediaItem): 'DirectPlay' | 'Transcode' {
+    return item.playbackType === PlaybackType.Direct ? 'DirectPlay' : 'Transcode';
 }
